@@ -1,0 +1,53 @@
+#!/usr/bin/python3
+import sys
+
+def is_prime(num):
+  """
+  Primality test using trial division (for demonstration only).
+  """
+  if num <= 1:
+    return False
+  if num <= 3:
+    return True
+  if num % 2 == 0 or num % 3 == 0:
+    return False
+  i = 5
+  while i * i <= num:
+    if num % i == 0 or num % (i + 2) == 0:
+      return False
+    i += 6
+  return True
+
+def factor_rsa(n):
+  """
+  Attempts to factor a number (n) using trial division (for demonstration).
+  This is not suitable for large RSA numbers due to computational limitations.
+  """
+  if is_prime(n):
+    return n, 1  # n is itself a prime
+  for i in range(2, int(n**0.5) + 1):
+    if n % i == 0:
+      return i, n // i
+  return None, None  # Not factored
+
+def main():
+  if len(sys.argv) != 2:
+    print("Usage: factors.py <file>")
+    sys.exit(1)
+
+  with open(sys.argv[1], "r") as file:
+    try:
+      number = int(file.read().strip())
+    except ValueError:
+      print("Invalid input: Please provide a valid integer.")
+      sys.exit(1)
+
+    factors = factor_rsa(number)
+    if factors:
+      print(f"{number} = {factors[0]} * {factors[1]}")
+    else:
+      print(f"{number} could not be factored within the time limit using trial division.")
+
+if __name__ == "__main__":
+  main()
+
